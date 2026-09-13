@@ -1,6 +1,6 @@
 # AyurDiag — AI-Powered Ayurvedic & Medical Assistant
 
-A Retrieval-Augmented Generation (RAG) chatbot built with Flask, SentenceTransformers, and ChromaDB. Users describe their symptoms in plain language, and the assistant matches them against a database of 30 diseases — then returns the likely condition alongside both **Ayurvedic** and **Allopathic** medicine suggestions and the recommended medical department.
+A Retrieval-Augmented Generation (RAG) chatbot built with Flask, SentenceTransformers, and ChromaDB. Users describe their symptoms in plain language, and the assistant matches them against a database of **161 diseases** across 77 specialties — then returns the likely condition alongside both **Ayurvedic** and **Allopathic** medicine suggestions and the recommended medical department.
 
 ## Overview
 
@@ -27,10 +27,16 @@ A Retrieval-Augmented Generation (RAG) chatbot built with Flask, SentenceTransfo
    pip install -r requirements.txt
    ```
 
-2. (Optional) The dataset is already provided as `Final Year Diseases Dataset.xlsx`. To regenerate it:
+2. (Optional) The dataset is already provided as `Final Year Diseases Dataset.xlsx`. To regenerate the base 30 diseases:
 
    ```
    python create_dataset.py
+   ```
+
+   To expand the dataset with 131 additional diseases (161 total) without duplicating any existing ones:
+
+   ```
+   python expand_dataset.py
    ```
 
 3. Start the server:
@@ -47,12 +53,13 @@ Note: the first run downloads the `all-MiniLM-L6-v2` embedding model and re-inde
 
 ```
 app.py                  Flask backend, RAG pipeline, input validation, response formatting
-create_dataset.py       Generates the diseases Excel dataset
+create_dataset.py       Generates the base diseases Excel dataset
+expand_dataset.py       Expands the dataset with 131 additional diseases (deduplicates)
 requirements.txt        Python dependencies
 templates/index.html    Chat interface
 static/style.css        Styling (diagnosis card, typing indicator, etc.)
 static/script.js        Chat logic, rendering, voice input
-Final Year Diseases Dataset.xlsx    Dataset (30 diseases)
+Final Year Diseases Dataset.xlsx    Dataset (161 diseases)
 chroma_db/              ChromaDB persistence (auto-generated, gitignored)
 ```
 
