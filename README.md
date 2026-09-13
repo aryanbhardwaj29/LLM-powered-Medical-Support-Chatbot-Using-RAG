@@ -1,73 +1,61 @@
-# 🩺 Medical Support Chatbot  
-AI-Powered Medical Assistance System using MySQL, Flask, and RAG Architecture  
+# AyurDiag — AI-Powered Ayurvedic & Medical Assistant
 
----
+A Retrieval-Augmented Generation (RAG) chatbot built with Flask, SentenceTransformers, and ChromaDB. Users describe their symptoms in plain language, and the assistant matches them against a database of 30 diseases — then returns the likely condition alongside both **Ayurvedic** and **Allopathic** medicine suggestions and the recommended medical department.
 
-## 📌 Overview
+## Overview
 
-The Medical Support Chatbot is a backend-driven AI application designed to assist users with queries related to symptoms, diseases, and medications. The system integrates a structured MySQL relational database with a Flask-based REST API and a Retrieval-Augmented Generation (RAG) pipeline to provide accurate and context-aware responses.
+- User submits symptoms in natural language via a chat interface.
+- Inputs are validated for impossible or nonsensical medical claims (unrealistic temperature, heart rate, blood pressure, blood sugar, age, weight, contradictory symptoms, etc.).
+- The query is embedded with `all-MiniLM-L6-v2` and matched against a ChromaDB vector store of disease records using cosine similarity.
+- A confidence threshold determines whether a diagnosis is shown or the assistant asks for more detail.
+- Responses render as a structured "diagnosis card" in the frontend, showing the condition, medicines, advice, and department.
 
-This project demonstrates practical implementation of SQL, relational database design, and backend integration in a real-world use case.
+## Tech Stack
 
----
+- Python 3.10+
+- Flask
+- sentence-transformers (`all-MiniLM-L6-v2`)
+- ChromaDB (vector store, cosine distance)
+- openpyxl (dataset loading)
+- Vanilla HTML / CSS / JavaScript (with Web Speech API voice input)
 
-## 🗄 Database Design (MySQL Implementation)
+## How to Run
 
-A relational database schema was designed to store structured medical data, including:
+1. Install dependencies:
 
-- Disease Information  
-- Symptoms  
-- Medications  
-- Descriptions and Metadata  
+   ```
+   pip install -r requirements.txt
+   ```
 
-### Key Database Features:
+2. (Optional) The dataset is already provided as `Final Year Diseases Dataset.xlsx`. To regenerate it:
 
-- Designed normalized relational tables  
-- Implemented Primary Keys and Foreign Keys  
-- Used SQL queries (SELECT, INSERT, JOIN) for data retrieval  
-- Applied indexing for faster query execution  
-- Ensured data consistency and integrity  
+   ```
+   python create_dataset.py
+   ```
 
-The database was integrated with the backend using secure MySQL connectors and structured query execution.
+3. Start the server:
 
----
+   ```
+   python app.py
+   ```
 
-## ⚙️ System Architecture
+4. Open http://127.0.0.1:5001 in your browser.
 
-User Query  
-⬇  
-Flask REST API  
-⬇  
-MySQL Database (Structured Retrieval)  
-⬇  
-RAG Pipeline (Embedding + Context Matching)  
-⬇  
-Generated Response  
+Note: the first run downloads the `all-MiniLM-L6-v2` embedding model and re-indexes the disease records into `chroma_db/`, so startup takes longer the first time.
 
-The chatbot processes user input, retrieves relevant structured records from the database, and enhances responses using embedding-based similarity search.
+## Project Structure
 
----
+```
+app.py                  Flask backend, RAG pipeline, input validation, response formatting
+create_dataset.py       Generates the diseases Excel dataset
+requirements.txt        Python dependencies
+templates/index.html    Chat interface
+static/style.css        Styling (diagnosis card, typing indicator, etc.)
+static/script.js        Chat logic, rendering, voice input
+Final Year Diseases Dataset.xlsx    Dataset (30 diseases)
+chroma_db/              ChromaDB persistence (auto-generated, gitignored)
+```
 
-## 🚀 Key Features
+## Disclaimer
 
-- AI-powered medical query handling  
-- Relational database integration using MySQL  
-- REST API backend using Flask  
-- Metadata filtering and chunking for optimized retrieval  
-- Modular and scalable system design  
-
----
-
-## 🛠 Tech Stack
-
-- Python  
-- Flask  
-- MySQL  
-- SQL  
-- LangChain  
-- SentenceTransformers  
-- REST API  
-
----
-
-## 📂 Project Structure
+AyurDiag is an AI assistant, not a substitute for professional medical advice. Always consult a qualified healthcare provider for serious concerns.
